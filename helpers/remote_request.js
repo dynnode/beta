@@ -23,8 +23,6 @@ module.exports = {
     },
     postRequest: function (data, url, callback) {
 
-        console.log(data);
-
         request({
             headers: {
                 'Content-Type': 'application/json'

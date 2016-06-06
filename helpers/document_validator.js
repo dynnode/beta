@@ -37,5 +37,3 @@ var prepareStack = function (stack) {
 
     return newtack;
 };
-
-
