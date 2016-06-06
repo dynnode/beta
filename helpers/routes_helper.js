@@ -58,9 +58,9 @@ module.exports = {
                     session: (req.account_info_session) ? req.account_info_session : {}
                 }
                 break;
-            case "UPDATE":
+            case "PUT":
                 payload = {
-                    request: req.body,
+                    request: req.query,
                     session: (req.account_info_session) ? req.account_info_session : {}
                 }
                 break;

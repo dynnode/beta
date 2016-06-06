@@ -410,7 +410,6 @@ module.exports = {
              * Build the query to check existing data
              * @type {{}}
              */
-            var query = {};
             query[datamodeling.fieldname] = {
                 $exists: true,
                 $nin: datamodeling.dataexist
@@ -1099,7 +1098,9 @@ module.exports = {
                     return datareturn({
                         status: 202,
                         message: 'The data entered already exits',
-                        response: {hash: doc[0].hash},
+                        response: {
+                            hash: doc[0].hash
+                        },
                         currentdata: Object(uniquefield),
                         dataexists: true
                     });

@@ -119,7 +119,9 @@ module.exports = {
     },
     update_customer: function (payload, args, request_type, callback) {
 
-        if (request_type === "UPDATE") {
+        if (request_type === "PUT") {
+
+            console.log(payload.request);
 
             var validationFields = ['customer_hash'];
 

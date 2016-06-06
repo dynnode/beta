@@ -1,6 +1,4 @@
 "use strict";
-/*global global: false, app_dirname: false */
-/*jshint -W030 */
 /**
  * Configs and helpers
  * @type {appconfig.app_dirname|*}
@@ -95,6 +93,73 @@ module.exports = {
                     });
                     return;
                 }
+            });
+
+
+        } else {
+            callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
+        }
+    },
+   delete_account: function (payload, args, request_type, callback) {
+
+        if (request_type === "PUT") {
+            /**
+             * Validation fields
+             * @type {string[]}
+             */
+            var validationFields = ['account_hash'];
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
+                callback({
+                    statuserror: 400,
+                    module: 'accounts',
+                    message: 'validation failed, the following fields are required',
+                    fields: validationFields,
+                    payload: payload.request
+                });
+                return;
+            }
+
+            /**
+             * Fire mongoDB update call
+             */
+            mongoDb.deleteData(payload.request, accountsModel, function (data) {
+                accountsParser.parseResponse(data, callback);
+            });
+
+
+        } else {
+            callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
+        }
+    },
+    update_account: function (payload, args, request_type, callback) {
+
+        if (request_type === "DELETE") {
+            /**
+             * Validation fields
+             * @type {string[]}
+             */
+            var validationFields = ['account_hash'];
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
+                callback({
+                    statuserror: 400,
+                    module: 'accounts',
+                    message: 'validation failed, the following fields are required',
+                    fields: validationFields,
+                    payload: payload.request
+                });
+                return;
+            }
+
+            /**
+             * Remove the password field
+             */
+            delete payload.request.password;
+
+            /**
+             * Fire mongoDB update call
+             */
+            mongoDb.updateData(payload.request, accountsModel, function (data) {
+                accountsParser.parseResponse(data, callback);
             });
 
 
