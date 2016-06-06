@@ -1,0 +1,11 @@
+{
+        "app_name": "NodeJS Generic API",
+        "app_version": "1.0.0",
+        "app_dirname": "./",
+        "app_port": "8095",
+    	"authentication_secret": "08aaa53efb958111fb4ea9e60a88ee79",
+    	"session_secret": "11fb4ea9e60a88ee7908aaa53efb9581",
+    	"crypt_salt": "958111fb4ea9e60a8808aaa53efbee79"
+
+}
+
