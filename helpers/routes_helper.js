@@ -1,10 +1,8 @@
 "use strict";
 module.exports = {
 
-    validateArguments: function (args_list) {
-
+    validateArguments: function(args_list) {
         var args = [];
-
         if (args_list.param_1) {
             args.push(args_list.param_1)
         }
@@ -37,57 +35,43 @@ module.exports = {
         if (args_list.param_10) {
             args.push(args_list.param_10)
         }
-
         return args;
-
-
     },
-    validateRequest: function (req, method) {
-
+    validateRequest: function(req, method) {
         var payload = {};
         switch (method) {
-
             case "GET":
                 payload = {
                     request: req.query,
                     session: (req.account_info_session) ? req.account_info_session : {}
                 }
                 break;
-
             case "POST":
                 payload = {
                     request: req.body,
                     session: (req.account_info_session) ? req.account_info_session : {}
                 }
                 break;
-
             case "DELETE":
                 payload = {
                     request: req.body,
                     session: (req.account_info_session) ? req.account_info_session : {}
                 }
                 break;
-
             case "UPDATE":
                 payload = {
                     request: req.body,
                     session: (req.account_info_session) ? req.account_info_session : {}
                 }
                 break;
-
-            default :
+            default:
                 payload = {
                     request: req.body,
                     session: (req.account_info_session) ? req.account_info_session : {}
                 }
                 break;
         }
-
-        console.log(req.account_info_session);
-
         return payload;
-
-
     }
 
 }

@@ -6,17 +6,17 @@
 global.app_dirname;
 var app_dirname = global.app_dirname;
 var mongoDb = require(app_dirname + '/databases/mongoose/' + process.env.DB_ENGINE);
-var documentValidator = require(app_dirname + '/utilities/documentvalidator');
+var document_validator = require(app_dirname + '/helpers/document_validator');
 
-var crypt = require(app_dirname + '/utilities/crypt');
-var webtoken = require(app_dirname + '/utilities/webtoken');
+var crypt = require(app_dirname + '/helpers/crypt');
+var webtoken = require(app_dirname + '/helpers/webtoken');
 
 /**
  *
  * @type {exports}
  */
-var accountParser = require(app_dirname + '/components/account/account_parser');
-var accountModel = require(app_dirname + '/components/account/account_model');
+var accountsParser = require(app_dirname + '/components/accounts/accounts_parser');
+var accountsModel = require(app_dirname + '/components/accounts/accounts_model');
 
 module.exports = {
 
@@ -33,7 +33,7 @@ module.exports = {
         if (request_type === "POST") {
 
             var responsePayload = {
-                username: (payload) ? payload.username : '',
+                username: (payload.request) ? payload.request.username : '',
                 password: 'REDACTED'
             };
 
@@ -42,7 +42,7 @@ module.exports = {
              * @type {string[]}
              */
             var validationFields = ['username', 'password'];
-            if (!documentValidator.validatedocument(validationFields, payload)) {
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
                 return callback({
                     statuserror: 400,
                     module: 'authentication',
@@ -53,10 +53,10 @@ module.exports = {
             }
 
             var auth_payload = {
-                account_username: payload.username
+                account_username: payload.request.username
             }
 
-            mongoDb.authenticateData(auth_payload, accountModel, function (data) {
+            mongoDb.authenticateData(auth_payload, accountsModel, function (data) {
 
 
                 if (data.statuserror) {
@@ -70,7 +70,7 @@ module.exports = {
 
                 } else {
 
-                    crypt.compare(payload.password, data.response[0].account_password, function (err, response) {
+                    crypt.compare(payload.request.password, data.response[0].account_password, function (err, response) {
 
                         if (response) {
 
@@ -147,7 +147,7 @@ module.exports = {
         var auth_payload = {
             hash: account_hash
         }
-        mongoDb.authenticateData(auth_payload, accountModel, function (data) {
+        mongoDb.authenticateData(auth_payload, accountsModel, function (data) {
             if (data.statuserror) {
                 return callback({
                     statuserror: 401,

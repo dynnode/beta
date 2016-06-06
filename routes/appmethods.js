@@ -39,7 +39,7 @@ var modules_count = Object.keys(modules).length;
  * Auto load the class by request
  * @type {*}
  */
-var module_loader = require(app_dirname + '/utilities/autoloadmodule');
+var module_loader = require(app_dirname + '/helpers/autoload_module');
 
 
 /**
@@ -71,23 +71,15 @@ module.exports = {
         var i =0;
         for (var key in modules) {
             if (key == methodname) {
-                if(key === "authentication"){
-                    if (typeof modules[key][args[1]] === "function") {
-                        modules[key][args[1]](payload, args, request_type, callback);
-                    } else {
-                        return callback({statuserror: 404, message: 'argument not found', response: 'argument ' + args[1] + ' doesn\'t exist, please contact support or check the api documentation.' });
-                    }
-                }else{
-                    if (typeof modules[key][args[1]] === "function") {
-                        modules[key][args[1]](payload, args, request_type, callback);
-                    } else {
-                        return callback({statuserror: 404, message: 'argument not found', response: 'argument ' + args[1] + ' doesn\'t exist, please contact support or check the api documentation.' });
-                    }
+                if (typeof modules[key][args[1]] === "function") {
+                    modules[key][args[1]](payload, args, request_type, callback);
+                } else {
+                    return callback({statuserror: 404, message: 'argument not found', response: 'argument ' + args[1] + ' doesn\'t exist, please contact support or check the api documentation.' });
                 }
             } else {
                 i++;
                 if (i === modules_count) {
-                    return callback({statuserror: 404, message: 'module name not found', response: 'module name specified doesn\'t exist, please contact support.' });
+                    return callback({statuserror: 404, message: 'model name not found', response: 'model name specified doesn\'t exist, please contact support.' });
                 }
             }
         }
@@ -111,7 +103,7 @@ module.exports = {
             }
 
         }else{
-            return callback({statuserror: 404, message: 'module name not found', response: 'module name specified doesn\'t exist, please contact support.' });
+            return callback({statuserror: 404, message: 'model name not found', response: 'model name specified doesn\'t exist, please contact support.' });
         }
         return [];
     }

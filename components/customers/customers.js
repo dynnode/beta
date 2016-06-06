@@ -5,7 +5,7 @@
  */
 global.app_dirname;
 var mongoDb = require(app_dirname + '/databases/mongoose/' + process.env.DB_ENGINE);
-var documentValidator = require(app_dirname + '/utilities/documentvalidator');
+var document_validator = require(app_dirname + '/helpers/document_validator');
 
 
 /**
@@ -20,7 +20,7 @@ var customersModel = require('./customers_model');
  *  References Modules
  * @type {Array}
  */
-var accountModel = require(app_dirname + '/components/account/account_model');
+var accountsModel = require(app_dirname + '/components/accounts/accounts_model');
 
 module.exports = {
 
@@ -36,7 +36,7 @@ module.exports = {
              * @type {string[]}
              */
             var validationFields = ['account_hash', 'customer_company_name', 'customer_email', 'customer_firstname', 'customer_lastname'];
-            if (!documentValidator.validatedocument(validationFields, payload.request)) {
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
                 callback({
                     statuserror: 400,
                     module: 'customers',
@@ -49,13 +49,14 @@ module.exports = {
 
             /**
              * This is the mongo db relationship reference model ex. Accounts object will automatically added to the customer object.
+             * Keep in mind that always you will be saving parent model reference to the child model not vice versa
              * @type {*[]}
              */
             var references = [
                 {
-                    name: 'account',
-                    model: accountModel,
-                    hashref: payload.request.account_hash
+                    reference_name: 'account',
+                    reference_model: accountsModel,
+                    reference_hash: payload.request.account_hash
                 }
             ];
 
@@ -71,7 +72,7 @@ module.exports = {
             });
 
         } else {
-            callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
+            callback({statuserror: 405, message: 'method not allowed', response: 'Method request ' + request_type + ' is not allowed, please use the correct CRUD method request.' });
         }
 
 
@@ -82,7 +83,7 @@ module.exports = {
 
             var validationFields = ['customer_hash'];
 
-            if (!documentValidator.validatedocument(validationFields, payload.request)) {
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
                 callback({
                     statuserror: 400,
                     module: 'customers',
@@ -112,7 +113,7 @@ module.exports = {
             });
 
         } else {
-            callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
+            callback({statuserror: 405, message: 'method not allowed', response: 'Method request ' + request_type + ' is not allowed, please use the correct CRUD method request.' });
         }
 
     },
@@ -122,7 +123,7 @@ module.exports = {
 
             var validationFields = ['customer_hash'];
 
-            if (!documentValidator.validatedocument(validationFields, payload.request)) {
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
                 callback({
                     statuserror: 400,
                     module: 'customers',
@@ -146,7 +147,7 @@ module.exports = {
 
 
         } else {
-            callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
+            callback({statuserror: 405, message: 'method not allowed', response: 'Method request ' + request_type + ' is not allowed, please use the correct CRUD method request.' });
         }
 
     },
@@ -156,7 +157,7 @@ module.exports = {
 
             var validationFields = ['customer_hash'];
 
-            if (!documentValidator.validatedocument(validationFields, payload.request)) {
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
                 callback({
                     statuserror: 400,
                     module: 'customers',
@@ -179,7 +180,7 @@ module.exports = {
             });
 
         } else {
-            callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
+            callback({statuserror: 405, message: 'method not allowed', response: 'Method request ' + request_type + ' is not allowed, please use the correct CRUD method request.' });
         }
     },
 
@@ -190,7 +191,7 @@ module.exports = {
 
             var validationFields = ['account_hash'];
 
-            if (!documentValidator.validatedocument(validationFields, payload.request)) {
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
                 callback({
                     statuserror: 400,
                     module: 'customers',
@@ -207,7 +208,7 @@ module.exports = {
 
 
         } else {
-            callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
+            callback({statuserror: 405, message: 'method not allowed', response: 'Method request ' + request_type + ' is not allowed, please use the correct CRUD method request.' });
         }
 
 
@@ -216,7 +217,7 @@ module.exports = {
 
         if (request_type === "GET") {
             var validationFields = ['keywords'];
-            if (!documentValidator.validatedocument(validationFields, payload.request)) {
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
                 callback({
                     statuserror: 400,
                     module: 'customers',
@@ -241,7 +242,7 @@ module.exports = {
 
 
         } else {
-            callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
+            callback({statuserror: 405, message: 'method not allowed', response: 'Method request ' + request_type + ' is not allowed, please use the correct CRUD method request.' });
         }
 
     }

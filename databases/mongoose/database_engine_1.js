@@ -7,7 +7,7 @@
 
 global.app_dirname;
 
-var hashcode = require(app_dirname + '/utilities/hashgenerator');
+var hashcode = require(app_dirname + '/helpers/hash_generator');
 var database_uri = process.env.DB_URL;
 var database_username = process.env.DB_USER;
 var database_password = process.env.DB_PASS;
@@ -1038,13 +1038,13 @@ module.exports = {
                             /**
                              * Instantiate the model
                              */
-                            var referencemodel = referencemodels[i].model;
+                            var referencemodel = referencemodels[i].reference_model;
                             /**
                              * Create the update set dynamically
                              */
-                            var modelname = referencemodels[i].name;
+                            var modelname = referencemodels[i].reference_name;
                             referencemodel.find(Object({
-                                hash: referencemodels[i].hashref
+                                hash: referencemodels[i].reference_hash
                             }), function (err, doc) {
                                 if (err) {
                                     return datareturn({

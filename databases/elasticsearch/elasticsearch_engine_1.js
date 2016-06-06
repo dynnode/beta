@@ -7,7 +7,7 @@
 
 global.app_dirname;
 
-var hashcode = require(app_dirname + '/utilities/hashgenerator');
+var hashcode = require(app_dirname + '/helpers/hashgenerator');
 var client = [];
 var elk_uri = process.env.ELK_URL;
 var elk_port_number = process.env.ELK_PORT_NUMBER;
@@ -555,7 +555,7 @@ module.exports = {
                 type: datamodeling.indextype,
                 id: datamodeling.hash,
                 body: {
-                    doc: datamodeling,
+                    doc: {doc: datamodeling.body },
                     updated: true
                 }
             }, function (error, exists) {

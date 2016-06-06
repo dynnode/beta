@@ -2,26 +2,26 @@
 /*global global: false, app_dirname: false */
 /*jshint -W030 */
 /**
- * Configs and Utilities
+ * Configs and helpers
  * @type {appconfig.app_dirname|*}
  */
 global.app_dirname;
 var app_dirname = global.app_dirname;
 var mongoDb = require(app_dirname + '/databases/mongoose/' + process.env.DB_ENGINE);
-var documentValidator = require(app_dirname + '/utilities/documentvalidator');
+var document_validator = require(app_dirname + '/helpers/document_validator');
 
 /**
  * Modules
  * @type {exports}
  */
-var accountParser = require('./account_parser');
-var accountModel = require('./account_model');
+var accountsParser = require('./accounts_parser');
+var accountsModel = require('./accounts_model');
 
 /**
  * Crypt Library
  * @type {*}
  */
-var crypt = require(app_dirname + '/utilities/crypt');
+var crypt = require(app_dirname + '/helpers/crypt');
 
 module.exports = {
 
@@ -32,7 +32,7 @@ module.exports = {
              * @type {string[]}
              */
             var validationFields = ['account_hash'];
-            if (!documentValidator.validatedocument(validationFields, payload.request)) {
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
                 callback({
                     statuserror: 400,
                     module: 'accounts',
@@ -44,8 +44,8 @@ module.exports = {
             }
 
 
-            mongoDb.getAllDataRef(payload.request, accountModel, function (data) {
-                accountParser.parseResponse(data, callback);
+            mongoDb.getAllDataRef(payload.request, accountsModel, function (data) {
+                accountsParser.parseResponse(data, callback);
             });
 
         } else {
@@ -59,8 +59,8 @@ module.exports = {
              * Validation fields
              * @type {string[]}
              */
-            var validationFields =  ['account_username', 'account_email', 'account_password', 'account_firstname', 'account_lastname', 'account_type'];
-            if (!documentValidator.validatedocument(validationFields, payload.request)) {
+            var validationFields = ['account_username', 'account_email', 'account_password', 'account_firstname', 'account_lastname', 'account_type'];
+            if (!document_validator.validatedocument(validationFields, payload.request)) {
                 callback({
                     statuserror: 400,
                     module: 'accounts',
@@ -74,18 +74,18 @@ module.exports = {
             /**
              * Encrypt the password entered by the user
              */
-            crypt.encrypt_perm(payload.request.account_password, function (err, hash) {
+            crypt.encrypt_perm(payload.request.accounts_password, function (err, hash) {
                 if (hash.length > 0) {
-                    payload.request.account_password = hash;
+                    payload.request.accounts_password = hash;
                     /**
                      *
-                     * @type {{account_username: (*|accountSchema.account_username|auth_payload.account_username|userInformation.account_username)}}
+                     * @type {{account_username: (*|accountsSchema.account_username|auth_payload.account_username|userInformation.account_username)}}
                      */
                     var uniquefield = {
                         account_username: payload.request.account_username
                     }
-                    mongoDb.saveUniqueData(payload.request, uniquefield, accountModel, function (data) {
-                        accountParser.parseResponse(data, callback);
+                    mongoDb.saveUniqueData(payload.request, uniquefield, accountsModel, function (data) {
+                        accountsParser.parseResponse(data, callback);
                     });
                 } else {
                     callback({
@@ -96,7 +96,6 @@ module.exports = {
                     return;
                 }
             });
-
 
 
         } else {

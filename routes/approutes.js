@@ -1,18 +1,7 @@
 /**
  * Created by williamdiaz on 7/29/15.
  */
-
 "use strict";
-
-
-/****
- *
- *
- *                  DO NOT CHANGE THIS FILE
- *
- *
- */
-
 
 /**
  * Regular classes
@@ -29,28 +18,39 @@ var log = require('log');
 var error_log = new log('warning');
 var app_dirname = global.app_dirname;
 
-var functionhelper = require(app_dirname + '/utilities/functionhelper');
+/**
+ * Helpers
+ * @type {*}
+ */
 
+var routesHelper = require(app_dirname + '/helpers/routes_helper');
+
+/**
+ * Middlewares
+ * @type {*}
+ */
 var authorizeMiddleware = require(app_dirname + '/middlewares/authenticator');
 
 
 module.exports = {
 
-    initApp: function (app) {
+    initApp: function(app) {
 
         var routes = require(app_dirname + '/routes/appmethods');
 
         /**
          *  App handlers
          */
-        var jsonParser = bodyParser.json({ limit: "500mb" });
+        var jsonParser = bodyParser.json({
+            limit: "500mb"
+        });
 
 
         /**
          *  General Get method
          */
 
-        app.all('/', function (req, res) {
+        app.all('/', function(req, res) {
             res.status(200).json({
                 success: true,
                 result: 'Please provide a method name for the API.'
@@ -62,7 +62,7 @@ module.exports = {
          *  Api Get method
          */
 
-        app.all('/api', function (req, res) {
+        app.all('/api', function(req, res) {
             res.status(200).json({
                 success: true,
                 result: 'Please provide the correct crud method names for the API.'
@@ -73,9 +73,9 @@ module.exports = {
         /**
          * Get method with method name and action name as parameters via pluralizers
          */
-        app.get('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.checkUser, timeout('50000'), function (req, res) {
+        app.get('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, timeout('50000'), function(req, res) {
                 try {
-                    var callback = function (data) {
+                    var callback = function(data) {
                         if (data.statuserror) {
                             res.status(data.statuserror).json({
                                 success: false,
@@ -88,16 +88,20 @@ module.exports = {
                             });
                         }
                     };
-                    routes.initMethod(req.params.methodname, functionhelper.validateRequest(req, req.method), functionhelper.validateArguments(req.params), req.method, callback);
+                    routes.initMethod(req.params.methodname, routesHelper.validateRequest(req, req.method), routesHelper.validateArguments(req.params), req.method, callback);
                 } catch (e) {
                     error_log.error(e);
                 }
             },
-            function (error, req, res, next) {
+            function(error, req, res, next) {
                 if (req.timedout) {
                     res.status(500).json({
                         success: false,
-                        result: {statuserror: 500, message: 'Request timed out', error: error}
+                        result: {
+                            statuserror: 500,
+                            message: 'Request timed out',
+                            error: error
+                        }
                     });
                 } else {
                     next(error);
@@ -109,9 +113,9 @@ module.exports = {
         /**
          *  Post method with method name and action name as parameters via pluralizers
          */
-        app.post('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.checkUser, timeout('50000'), function (req, res) {
+        app.post('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, timeout('50000'), function(req, res) {
                 try {
-                    var callback = function (data) {
+                    var callback = function(data) {
                         if (data.statuserror) {
                             res.status(data.statuserror).json({
                                 success: false,
@@ -128,16 +132,20 @@ module.exports = {
                             }
                         }
                     };
-                    routes.initMethod(req.params.methodname, functionhelper.validateRequest(req, req.method), functionhelper.validateArguments(req.params), req.method, callback);
+                    routes.initMethod(req.params.methodname, routesHelper.validateRequest(req, req.method), routesHelper.validateArguments(req.params), req.method, callback);
                 } catch (e) {
                     error_log.error(e);
                 }
             },
-            function (error, req, res, next) {
+            function(error, req, res, next) {
                 if (req.timedout) {
                     res.status(500).json({
                         success: false,
-                        result: {statuserror: 500, message: 'Request timed out', error: error}
+                        result: {
+                            statuserror: 500,
+                            message: 'Request timed out',
+                            error: error
+                        }
                     });
                 } else {
                     next(error);
@@ -149,9 +157,9 @@ module.exports = {
         /**
          *  Delete method with method name and action name as parameters via pluralizers
          */
-        app.delete('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.checkUser, timeout('50000'), function (req, res) {
+        app.delete('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, timeout('50000'), function(req, res) {
                 try {
-                    var callback = function (data) {
+                    var callback = function(data) {
                         if (data.statuserror) {
                             res.status(data.statuserror).json({
                                 success: false,
@@ -169,16 +177,20 @@ module.exports = {
                         }
 
                     };
-                    routes.initMethod(req.params.methodname, functionhelper.validateRequest(req, req.method), functionhelper.validateArguments(req.params), req.method, callback);
+                    routes.initMethod(req.params.methodname, routesHelper.validateRequest(req, req.method), routesHelper.validateArguments(req.params), req.method, callback);
                 } catch (e) {
                     error_log.error(e);
                 }
             },
-            function (error, req, res, next) {
+            function(error, req, res, next) {
                 if (req.timedout) {
                     res.status(500).json({
                         success: false,
-                        result: {statuserror: 500, message: 'Request timed out', error: error}
+                        result: {
+                            statuserror: 500,
+                            message: 'Request timed out',
+                            error: error
+                        }
                     });
                 } else {
                     next(error);
@@ -190,9 +202,9 @@ module.exports = {
         /**
          *  Put method with method name and action name as parameters via pluralizers
          */
-        app.put('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', timeout('50000'), authorizeMiddleware.checkUser, function (req, res) {
+        app.put('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', timeout('50000'), authorizeMiddleware.authenticateUser, function(req, res) {
                 try {
-                    var callback = function (data) {
+                    var callback = function(data) {
                         if (data.statuserror) {
                             res.status(data.statuserror).json({
                                 success: false,
@@ -210,16 +222,20 @@ module.exports = {
                         }
 
                     };
-                    routes.initMethod(req.params.methodname, functionhelper.validateRequest(req, req.method), functionhelper.validateArguments(req.params), req.method, callback);
+                    routes.initMethod(req.params.methodname, routesHelper.validateRequest(req, req.method), routesHelper.validateArguments(req.params), req.method, callback);
                 } catch (e) {
                     error_log.error(e);
                 }
             },
-            function (error, req, res, next) {
+            function(error, req, res, next) {
                 if (req.timedout) {
                     res.status(500).json({
                         success: false,
-                        result: {statuserror: 500, message: 'Request timed out', error: error}
+                        result: {
+                            statuserror: 500,
+                            message: 'Request timed out',
+                            error: error
+                        }
                     });
                 } else {
                     next(error);
