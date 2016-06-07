@@ -36,6 +36,7 @@ module.exports = {
                     authentication.validateUser(response.decoded.account_hash, function (validation_response) {
                         if (validation_response.status === 200) {
                             req.account_info_session = validation_response.response[0];
+                            console.log('auth fired');
                             next();
                         } else {
                             res.status(403).json({
@@ -57,6 +58,7 @@ module.exports = {
         } else {
             if ((req.params.methodname === "accounts" && req.method === "POST" && (req.params.param_2) ? req.params.param_2 : req.params.param_1 === "add_account") || (req.params.methodname === "authentication" && req.method === "POST" && (req.params.param_2) ? req.params.param_2 : req.params.param_1 === "authorize_user")) {
                 req.account_info_session = {};
+                console.log('auth fired2');
                 next();
             } else {
                 req.account_info_session = {};

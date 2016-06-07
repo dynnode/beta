@@ -82,7 +82,6 @@ module.exports = {
         if (request_type === "GET") {
 
             var validationFields = ['customer_hash'];
-
             if (!document_validator.validatedocument(validationFields, payload.request)) {
                 callback({
                     statuserror: 400,
@@ -94,9 +93,8 @@ module.exports = {
                 return;
             }
 
-
             /**
-             * Refereneces
+             * Relationship references, this will show the main parent object and all the child's objects (in this case the account object will be nested into the customer object)
              * @type {string[]}
              */
             payload.request.references = ['account'];
@@ -121,10 +119,7 @@ module.exports = {
 
         if (request_type === "PUT") {
 
-            console.log(payload.request);
-
             var validationFields = ['customer_hash'];
-
             if (!document_validator.validatedocument(validationFields, payload.request)) {
                 callback({
                     statuserror: 400,
@@ -135,6 +130,14 @@ module.exports = {
                 });
                 return;
             }
+
+            /**
+             * Get the customer hash request and pass it as hash to MongoDb
+             * Please see documentation about hash and parent hash MongoDb schema fields
+             * @type {{hash: (payload.request.customer_hash|*)}}
+             */
+            payload.request.hash = payload.request.customer_hash;
+
 
             /**
              * Check against the DB

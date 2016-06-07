@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- *
+ *   DO NOT MODIFY THIS FILE
  */
 global.app_dirname;
 var app_dirname = global.app_dirname;
@@ -113,7 +113,7 @@ module.exports = {
                                     }
 
 
-                                    return callback({
+                                     callback({
                                         status: 200,
                                         message: 'Authentication successful',
                                         response: {

@@ -34,3 +34,4 @@ node_modules
 
 #php storm files
 .idea
+/docs/
