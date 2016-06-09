@@ -38,9 +38,12 @@ var authorizeMiddleware = require(app_dirname + '/middlewares/authenticator');
  */
 var customMiddlewares = require('./appmiddlewares');
 
+
+
+
 module.exports = {
 
-    initApp: function(app) {
+    initApp: function (app) {
 
         var routes = require(app_dirname + '/routes/appmethods');
 
@@ -56,7 +59,7 @@ module.exports = {
          *  General Get method
          */
 
-        app.all('/', function(req, res) {
+        app.all('/', function (req, res) {
             res.status(200).json({
                 success: true,
                 result: 'Please provide a method name for the API.'
@@ -68,7 +71,7 @@ module.exports = {
          *  Api Get method
          */
 
-        app.all('/api', function(req, res) {
+        app.all('/api', function (req, res) {
             res.status(200).json({
                 success: true,
                 result: 'Please provide the correct crud method names for the API.'
@@ -79,9 +82,9 @@ module.exports = {
         /**
          * Get method with method name and action name as parameters via pluralizers
          */
-        app.get('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function(req, res) {
+        app.get('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function (req, res) {
                 try {
-                    var callback = function(data) {
+                    var callback = function (data) {
                         if (data.statuserror) {
                             res.status(data.statuserror).json({
                                 success: false,
@@ -99,7 +102,7 @@ module.exports = {
                     error_log.error(e);
                 }
             },
-            function(error, req, res, next) {
+            function (error, req, res, next) {
                 if (req.timedout) {
                     res.status(500).json({
                         success: false,
@@ -119,9 +122,9 @@ module.exports = {
         /**
          *  Post method with method name and action name as parameters via pluralizers
          */
-        app.post('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function(req, res) {
+        app.post('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function (req, res) {
                 try {
-                    var callback = function(data) {
+                    var callback = function (data) {
                         if (data.statuserror) {
                             res.status(data.statuserror).json({
                                 success: false,
@@ -143,7 +146,7 @@ module.exports = {
                     error_log.error(e);
                 }
             },
-            function(error, req, res, next) {
+            function (error, req, res, next) {
                 if (req.timedout) {
                     res.status(500).json({
                         success: false,
@@ -163,9 +166,9 @@ module.exports = {
         /**
          *  Delete method with method name and action name as parameters via pluralizers
          */
-        app.delete('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function(req, res) {
+        app.delete('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function (req, res) {
                 try {
-                    var callback = function(data) {
+                    var callback = function (data) {
                         if (data.statuserror) {
                             res.status(data.statuserror).json({
                                 success: false,
@@ -188,7 +191,7 @@ module.exports = {
                     error_log.error(e);
                 }
             },
-            function(error, req, res, next) {
+            function (error, req, res, next) {
                 if (req.timedout) {
                     res.status(500).json({
                         success: false,
@@ -208,9 +211,9 @@ module.exports = {
         /**
          *  Put method with method name and action name as parameters via pluralizers
          */
-        app.put('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', timeout('50000'), authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function(req, res) {
+        app.put('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', timeout('50000'), authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function (req, res) {
                 try {
-                    var callback = function(data) {
+                    var callback = function (data) {
                         if (data.statuserror) {
                             res.status(data.statuserror).json({
                                 success: false,
@@ -233,7 +236,7 @@ module.exports = {
                     error_log.error(e);
                 }
             },
-            function(error, req, res, next) {
+            function (error, req, res, next) {
                 if (req.timedout) {
                     res.status(500).json({
                         success: false,
@@ -248,6 +251,7 @@ module.exports = {
                 }
             }
         )
+
 
     }
 

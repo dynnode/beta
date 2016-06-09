@@ -33,7 +33,8 @@
     "postmark": "^1.2.1",
     "rand-token": "^0.2.1",
     "request": "^2.63.0",
-    "sleep": "^3.0.0"
+    "sleep": "^3.0.0",
+    "universal-analytics": "^0.3.11"
   },
   "devDependencies": {},
   "scripts": {

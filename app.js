@@ -17,6 +17,14 @@ require('dotenv-safe').load();
  */
 global.app_dirname = __dirname;
 
+
+/**
+ * Google Analytics Cookie Session Based Identification
+ */
+
+var ua = require('universal-analytics');
+app.use(ua.middleware(process.env.GOOGLE_ANALITYCS_UA, {cookieName: '_ga'}));
+
 /**
  *  Custom modules
  * @type {exports}
@@ -40,6 +48,7 @@ app.use(session({
  *  Seesion headers
  */
 app.use(function (req, res, next) {
+    res.header("x-powered-by", "DynNodeJs");
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, X-Access-Token, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
@@ -52,6 +61,8 @@ approutes.initApp(app);
 /**
  *  Init the server
  */
+
+
 
 var server = app.listen(process.env.APP_PORT, function () {
     var appname = process.env.APP_NAME;

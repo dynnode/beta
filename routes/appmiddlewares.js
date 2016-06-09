@@ -25,8 +25,8 @@ var app_dirname = global.app_dirname;
  * @type {{authentication: *, account: *, customers: *}}
  */
 var middlewareMaps = {
-    custom_middleware: require(app_dirname + '/middlewares/custom_middleware'),
-    custom_second_middleware: require(app_dirname + '/middlewares/custom_second_middleware')
+    google_analytics_middleware: require(app_dirname + '/middlewares/google_analytics_middleware'),
+    custom_middleware: require(app_dirname + '/middlewares/custom_middleware')
 };
 
 
