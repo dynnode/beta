@@ -18,6 +18,14 @@ var log = require('log');
 var error_log = new log('warning');
 var app_dirname = global.app_dirname;
 
+
+
+/**
+ * MultiParser
+ * @type {*}
+ */
+var multipartParser = multipart();
+
 /**
  * Helpers
  * @type {*}
@@ -46,39 +54,30 @@ module.exports = {
     initApp: function (app) {
 
         var routes = require(app_dirname + '/routes/appmethods');
-
         /**
          *  App handlers
          */
         var jsonParser = bodyParser.json({
             limit: "500mb"
         });
-
-
         /**
          *  General Get method
          */
-
         app.all('/', function (req, res) {
             res.status(200).json({
                 success: true,
                 result: 'Please provide a method name for the API.'
             });
         });
-
-
         /**
          *  Api Get method
          */
-
         app.all('/api', function (req, res) {
             res.status(200).json({
                 success: true,
                 result: 'Please provide the correct crud method names for the API.'
             });
         });
-
-
         /**
          * Get method with method name and action name as parameters via pluralizers
          */
@@ -161,8 +160,6 @@ module.exports = {
                 }
             }
         )
-
-
         /**
          *  Delete method with method name and action name as parameters via pluralizers
          */
@@ -206,8 +203,6 @@ module.exports = {
                 }
             }
         )
-
-
         /**
          *  Put method with method name and action name as parameters via pluralizers
          */
@@ -251,7 +246,53 @@ module.exports = {
                 }
             }
         )
+        /**
+         *  Form Post method
+         */
+        app.post('/uploadapi/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', multipartParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('70000'), function (req, res) {
+                try {
+                    var callback = function (data) {
+                        if (data.statuserror) {
+                            res.status(data.statuserror).json({
+                                success: false,
+                                result: data
+                            });
+                        } else {
+                            if (data.parsed) {
+                                res.status(200).json(data);
+                            } else {
+                                res.status(200).json({
+                                    success: true,
+                                    result: data
+                                });
+                            }
+                        }
 
+                    };
+                    routes.initMethod(req.params.methodname, routesHelper.validateRequest(req, req.method), routesHelper.validateArguments(req.params), req.method, callback);
+                } catch (e) {
+                    error_log.error(e);
+                }
+            }
+            ,
+            function (error, req, res, next) {
+
+                if (req.timedout) {
+
+                    res.status(408).json({
+                        success: false,
+                        result: {statuserror: 408, message: 'Request timed out', error: error}
+                    });
+
+                    return;
+
+                } else {
+                    next(error);
+                }
+
+            }
+
+        )
 
     }
 

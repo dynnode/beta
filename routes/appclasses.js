@@ -27,7 +27,8 @@ var app_dirname = global.app_dirname;
 var classMaps= {
     authentication: require(app_dirname + '/components/authentication/authentication'),
     accounts: require(app_dirname + '/components/accounts/accounts'),
-    customers: require(app_dirname + '/components/customers/customers')
+    customers: require(app_dirname + '/components/customers/customers'),
+    upload_files: require(app_dirname + '/components/upload_files/upload_files')
 };
 
 

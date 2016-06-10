@@ -2,17 +2,16 @@
  * Created by William Diaz on 9/24/15.
  */
 
+"use strict";
+
 /**
  *
  *
- PLEASE DON'T CHANGE THIS FILE, THIS FILE IS PART OF THE PACKAGE UPDATE, IF YOU MODIFY THIS FILE YOU WILL LOSS YOUR CHANGES
+ PLEASE DO NOT CHANGE THIS FILE, THIS FILE IS PART OF THE PACKAGE UPDATE, IF YOU MODIFY THIS FILE YOU WILL LOSS YOUR CHANGES AFTER THE UPDATE
  *
  *
  */
 
-
-"use strict";
-global.app_dirname;
 
 /**
  * Google Analytics
@@ -37,20 +36,17 @@ module.exports = {
          * @type {number}
          */
         var start = new Date().getTime();
-        var parsed_path = [];
+        var parsed_path = req.path.split('/');
+
         req.on("end", function () {
-
             if (process.env.GOOGLE_ANALITYCS_ENABLED === "true") {
-
-                if (res.statusCode === 200 || res.statusCode === 201) {
+                if (res.statusCode === 200 || res.statusCode === 201 || parsed_path === "uploadapi") {
                     /**
                      * Track request on Google Analytics
                      */
                     var payload = (req.method === 'GET' || req.method === 'PUT') ? req.query : req.body;
-                    parsed_path = req.path.split('/');
                     visitor.screenview(req.path, 'DynNodeJs', 'com.dynnodejs.app', '1.0.0').send();
                     visitor.pageview(req.path).send();
-
                     if (process.env.GOOGLE_HIDE_HASHES === "true") {
                         var analitycs_payload = [];
                         for (var key in payload) {
