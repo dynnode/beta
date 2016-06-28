@@ -1,9 +1,9 @@
 "use strict";
 
 /**
- *
+ * Mongo Instantiation and Request Validator
  */
-global.app_dirname;
+
 var mongoDb = require(app_dirname + '/databases/mongoose/' + process.env.DB_ENGINE);
 var document_validator = require(app_dirname + '/helpers/document_validator');
 
@@ -47,23 +47,29 @@ module.exports = {
                 return;
             }
 
-            /**
-             * This is the mongo db relationship reference model ex. Accounts object will automatically added to the customer object.
-             * Keep in mind that always you will be saving parent model reference to the child model not vice versa
-             * @type {*[]}
-             */
-            var references = [
-                {
-                    reference_name: 'account',
-                    reference_model: accountsModel,
-                    reference_hash: payload.request.account_hash
+
+            var query_string = {
+                custom_query: {
+                    query_options: {
+                        save_unique: true
+                    },
+                    query: {
+                        data: payload.request,
+                        unique_fields: { customer_email: payload.request.customer_email },
+                        references: {
+                            reference_name: 'account',
+                            reference_model: accountsModel,
+                            reference_hash: payload.request.account_hash
+                        }
+                    }
                 }
-            ];
+            };
+
 
             /**
              * Save the request in the db
              */
-            mongoDb.saveByMultiRefData(payload.request, customersModel, references, function (data) {
+            mongoDb.saveData(query_string, customersModel, function (data) {
                 if (data.statuserror) {
                     customersParser.parseErrorResponse(data, callback);
                 } else {
@@ -94,15 +100,25 @@ module.exports = {
             }
 
             /**
-             * Relationship references, this will show the main parent object and all the child's objects (in this case the account object will be nested into the customer object)
-             * @type {string[]}
+             *
+             * @type {{custom_query: {query_options: {by_any_hash: boolean}, query: {hash: (userInformation.customer_hash|*), references: string[]}}}}
              */
-            payload.request.references = ['account'];
+            var query_string = {
+                custom_query: {
+                    query_options: {
+                        by_any_hash: true
+                    },
+                    query: {
+                        hash: payload.request.customer_hash,
+                        references: ['account']
+                    }
+                }
+            };
 
             /**
              * Check against the DB
              */
-            mongoDb.getAllDataRef(payload.request, customersModel, function (data) {
+            mongoDb.getData(query_string, customersModel, function (data) {
                 if (data.statuserror) {
                     customersParser.parseErrorResponse(data, callback);
                 } else {
@@ -207,7 +223,19 @@ module.exports = {
                 return;
             }
 
-            mongoDb.getAllDataRef(payload.request, customersModel, function (data) {
+            var query_string = {
+                custom_query: {
+                    query_options: {
+                        show_all: true
+                    },
+                    query: {
+                        references: ['account']
+                    }
+                }
+            };
+
+
+            mongoDb.getData(query_string, customersModel, function (data) {
                 customersParser.parseResponse(data, callback);
             });
 
@@ -232,16 +260,29 @@ module.exports = {
                 });
                 return;
             }
-            /**
-             * Set the fields that you want to look up on the database
-             * @type {string[]}
-             */
-            payload.request.fields_names = ['customer_company_name', 'customer_email', 'customer_lastname', 'customer_firstname'];
+
 
             /**
-             * search keywords
+             * Multiple Expression Search
+             * @type {{custom_query: {query_options: {by_keywords: boolean, use_multiple_expressions: boolean}, query: {multiple_keywords: *, references: string[]}}}}
              */
-            mongoDb.searchByKewords(payload.request, customersModel, function (data) {
+            var query_string = {
+                custom_query: {
+                    query_options: {
+                        by_keywords: true,
+                        use_multiple_expressions: true
+                    },
+                    query: {
+                        multiple_keywords: [
+                            { customer_company_name: 'Dyn2'},
+                            { customer_lastname: 'Diaz' }
+                        ],
+                        references: ['account']
+                    }
+                }
+            }
+
+            mongoDb.getData(query_string, customersModel, function (data) {
                 customersParser.parseResponse(data, callback);
             });
 
@@ -251,4 +292,5 @@ module.exports = {
         }
 
     }
-};
+}
+;

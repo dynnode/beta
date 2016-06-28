@@ -3,8 +3,7 @@
 /**
  *   DO NOT MODIFY THIS FILE
  */
-global.app_dirname;
-var app_dirname = global.app_dirname;
+
 var mongoDb = require(app_dirname + '/databases/mongoose/' + process.env.DB_ENGINE);
 var document_validator = require(app_dirname + '/helpers/document_validator');
 
@@ -113,7 +112,7 @@ module.exports = {
                                     }
 
 
-                                     callback({
+                                    callback({
                                         status: 200,
                                         message: 'Authentication successful',
                                         response: {
@@ -138,7 +137,11 @@ module.exports = {
             });
 
         } else {
-            return callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
+            return callback({
+                statuserror: 405,
+                message: 'method not allowed',
+                response: 'Method request is not allowed, please use the correct CRUD method request.'
+            });
         }
 
 

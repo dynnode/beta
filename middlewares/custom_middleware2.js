@@ -3,7 +3,7 @@
  */
 
 "use strict";
-
+global.app_dirname;
 
 
 /***
@@ -43,8 +43,12 @@ module.exports = {
          * Use the next function carefully if you have multiple middleware's it should be used only on the last middleware that you want to execute the next route handler
          */
 
+
+        console.log(res.statusCode);
+
+   next();
+
+
     }
-
-
 }
 

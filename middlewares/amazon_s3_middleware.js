@@ -33,8 +33,26 @@ module.exports = {
         try {
             if (process.env.AMASON_S3_AWS_ENABLED === "true") {
 
-                var file_path = req.files.fileUpload.path;
-                var file_type =req.files.fileUpload.type;
+
+//                var files = req.files;
+//                for (var key in files) {
+//                    if (files.hasOwnProperty(key)) {
+//                        var file = files[key];
+//                        for (var index in file) {
+//                            if (file.hasOwnProperty(index)) {
+//
+//                                console.log(file[index].path);
+//
+//
+//
+//                            }
+//                        }
+//                    }
+//
+//                }
+
+                var file_path = req.files.file.path;
+                var file_type = req.files.file.type;
                 var parsed_path = req.path.split('/');
 
                 /**
@@ -82,8 +100,12 @@ module.exports = {
                     });
                 });
             }
+            else {
+                next();
+            }
         }
-        catch (err) {
+        catch
+            (err) {
 
         }
 

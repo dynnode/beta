@@ -27,7 +27,8 @@ var app_dirname = global.app_dirname;
 var middlewareMaps = {
     google_analytics_middleware: require(app_dirname + '/middlewares/google_analytics_middleware'),
     amazon_s3_middleware: require(app_dirname + '/middlewares/amazon_s3_middleware'),
-    custom_middleware: require(app_dirname + '/middlewares/custom_middleware')
+    custom_middleware: require(app_dirname + '/middlewares/custom_middleware'),
+    custom_middleware2: require(app_dirname + '/middlewares/custom_middleware2')
 };
 
 

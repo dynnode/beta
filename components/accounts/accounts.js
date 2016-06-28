@@ -3,7 +3,7 @@
  * Configs and helpers
  * @type {appconfig.app_dirname|*}
  */
-global.app_dirname;
+
 var app_dirname = global.app_dirname;
 var mongoDb = require(app_dirname + '/databases/mongoose/' + process.env.DB_ENGINE);
 var document_validator = require(app_dirname + '/helpers/document_validator');
@@ -41,10 +41,21 @@ module.exports = {
                 return;
             }
 
+            /**
+             * Query to show all the records
+             * @type {{query_options: {show_all: boolean}, query: {}}}
+             */
+            payload.custom_query = {
+                query_options: {
+                    show_all: true
+                },
+                query: {}
+            }
 
-            mongoDb.getAllDataRef(payload.request, accountsModel, function (data) {
+            mongoDb.getData(payload, accountsModel, function (data) {
                 accountsParser.parseResponse(data, callback);
             });
+
 
         } else {
             callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
@@ -72,19 +83,40 @@ module.exports = {
             /**
              * Encrypt the password entered by the user
              */
-            crypt.encrypt_perm(payload.request.accounts_password, function (err, hash) {
+            crypt.encrypt_perm(payload.request.account_password, function (err, hash) {
+
                 if (hash.length > 0) {
-                    payload.request.accounts_password = hash;
+
+                    //Set the encrypted password before saving to the DB
+                    payload.request.account_password = hash;
+
+
+                    var query_string = {
+                        custom_query: {
+                            query_options: {
+                                save_unique: true
+                            },
+                            query: {
+                                data: payload.request,
+                                unique_fields: { account_username: payload.request.account_username, account_email: payload.request.account_email },
+
+                            }
+                        }
+                    };
+
+
                     /**
-                     *
-                     * @type {{account_username: (*|accountsSchema.account_username|auth_payload.account_username|userInformation.account_username)}}
+                     * Save the request in the db
                      */
-                    var uniquefield = {
-                        account_username: payload.request.account_username
-                    }
-                    mongoDb.saveUniqueData(payload.request, uniquefield, accountsModel, function (data) {
-                        accountsParser.parseResponse(data, callback);
+                    mongoDb.saveData(query_string, accountsModel, function (data) {
+                        if (data.statuserror) {
+                            accountsParser.parseErrorResponse(data, callback);
+                        } else {
+                            accountsParser.parseResponse(data, callback);
+                        }
                     });
+
+
                 } else {
                     callback({
                         statuserror: 400,
@@ -100,7 +132,7 @@ module.exports = {
             callback({statuserror: 405, message: 'method not allowed', response: 'Method request is not allowed, please use the correct CRUD method request.' });
         }
     },
-   delete_account: function (payload, args, request_type, callback) {
+    delete_account: function (payload, args, request_type, callback) {
 
         if (request_type === "PUT") {
             /**

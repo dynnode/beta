@@ -19,7 +19,6 @@ var error_log = new log('warning');
 var app_dirname = global.app_dirname;
 
 
-
 /**
  * MultiParser
  * @type {*}
@@ -45,8 +44,6 @@ var authorizeMiddleware = require(app_dirname + '/middlewares/authenticator');
  * @type {exports}
  */
 var customMiddlewares = require('./appmiddlewares');
-
-
 
 
 module.exports = {
@@ -84,17 +81,24 @@ module.exports = {
         app.get('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function (req, res) {
                 try {
                     var callback = function (data) {
+
                         if (data.statuserror) {
-                            res.status(data.statuserror).json({
+                            return res.status(data.statuserror).json({
                                 success: false,
                                 result: data
                             });
+
                         } else {
-                            res.status(200).json({
-                                success: true,
-                                result: data
-                            });
+                            if (data.parsed) {
+                                return res.status(200).json(data);
+                            } else {
+                                return res.status(200).json({
+                                    success: true,
+                                    result: data
+                                });
+                            }
                         }
+
                     };
                     routes.initMethod(req.params.methodname, routesHelper.validateRequest(req, req.method), routesHelper.validateArguments(req.params), req.method, callback);
                 } catch (e) {
@@ -103,7 +107,7 @@ module.exports = {
             },
             function (error, req, res, next) {
                 if (req.timedout) {
-                    res.status(500).json({
+                    return res.status(500).json({
                         success: false,
                         result: {
                             statuserror: 500,
@@ -124,21 +128,24 @@ module.exports = {
         app.post('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function (req, res) {
                 try {
                     var callback = function (data) {
+
                         if (data.statuserror) {
-                            res.status(data.statuserror).json({
+                            return res.status(data.statuserror).json({
                                 success: false,
                                 result: data
                             });
+
                         } else {
                             if (data.parsed) {
-                                res.status(200).json(data);
+                                return res.status(200).json(data);
                             } else {
-                                res.status(200).json({
+                                return res.status(200).json({
                                     success: true,
                                     result: data
                                 });
                             }
                         }
+
                     };
                     routes.initMethod(req.params.methodname, routesHelper.validateRequest(req, req.method), routesHelper.validateArguments(req.params), req.method, callback);
                 } catch (e) {
@@ -147,7 +154,7 @@ module.exports = {
             },
             function (error, req, res, next) {
                 if (req.timedout) {
-                    res.status(500).json({
+                    return res.status(500).json({
                         success: false,
                         result: {
                             statuserror: 500,
@@ -166,16 +173,19 @@ module.exports = {
         app.delete('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', jsonParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function (req, res) {
                 try {
                     var callback = function (data) {
+
+
                         if (data.statuserror) {
-                            res.status(data.statuserror).json({
+                            return res.status(data.statuserror).json({
                                 success: false,
                                 result: data
                             });
+
                         } else {
                             if (data.parsed) {
-                                res.status(200).json(data);
+                                return res.status(200).json(data);
                             } else {
-                                res.status(200).json({
+                                return res.status(200).json({
                                     success: true,
                                     result: data
                                 });
@@ -190,7 +200,7 @@ module.exports = {
             },
             function (error, req, res, next) {
                 if (req.timedout) {
-                    res.status(500).json({
+                    return res.status(500).json({
                         success: false,
                         result: {
                             statuserror: 500,
@@ -209,16 +219,18 @@ module.exports = {
         app.put('/api/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', timeout('50000'), authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('50000'), function (req, res) {
                 try {
                     var callback = function (data) {
+
                         if (data.statuserror) {
-                            res.status(data.statuserror).json({
+                            return res.status(data.statuserror).json({
                                 success: false,
                                 result: data
                             });
+
                         } else {
                             if (data.parsed) {
-                                res.status(200).json(data);
+                                return res.status(200).json(data);
                             } else {
-                                res.status(200).json({
+                                return res.status(200).json({
                                     success: true,
                                     result: data
                                 });
@@ -233,7 +245,7 @@ module.exports = {
             },
             function (error, req, res, next) {
                 if (req.timedout) {
-                    res.status(500).json({
+                    return res.status(500).json({
                         success: false,
                         result: {
                             statuserror: 500,
@@ -252,16 +264,18 @@ module.exports = {
         app.post('/uploadapi/:methodname?/:param_1?/:param_2?/:param_3?/:param_4?/:param_5?/:param_6?/:param_7?/:param_8?/:param_9?/:param_10?', multipartParser, authorizeMiddleware.authenticateUser, customMiddlewares.initMiddlewares, timeout('70000'), function (req, res) {
                 try {
                     var callback = function (data) {
+
                         if (data.statuserror) {
-                            res.status(data.statuserror).json({
+                            return res.status(data.statuserror).json({
                                 success: false,
                                 result: data
                             });
+
                         } else {
                             if (data.parsed) {
-                                res.status(200).json(data);
+                                return res.status(200).json(data);
                             } else {
-                                res.status(200).json({
+                                return res.status(200).json({
                                     success: true,
                                     result: data
                                 });
@@ -273,25 +287,21 @@ module.exports = {
                 } catch (e) {
                     error_log.error(e);
                 }
-            }
-            ,
+            },
             function (error, req, res, next) {
-
                 if (req.timedout) {
-
-                    res.status(408).json({
+                    return res.status(500).json({
                         success: false,
-                        result: {statuserror: 408, message: 'Request timed out', error: error}
+                        result: {
+                            statuserror: 500,
+                            message: 'Request timed out',
+                            error: error
+                        }
                     });
-
-                    return;
-
                 } else {
                     next(error);
                 }
-
             }
-
         )
 
     }

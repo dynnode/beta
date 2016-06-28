@@ -31,16 +31,17 @@ module.exports = {
      */
     init: function (req, res) {
 
+
         /**
          * Start calculate the time taken on the api calls
          * @type {number}
          */
         var start = new Date().getTime();
-        var parsed_path = req.path.split('/');
-
         req.on("end", function () {
+
+            var parsed_path = req.path.split('/');
             if (process.env.GOOGLE_ANALITYCS_ENABLED === "true") {
-                if (res.statusCode === 200 || res.statusCode === 201 || parsed_path === "uploadapi") {
+                if (res.statusCode === 200 || res.statusCode === 201) {
                     /**
                      * Track request on Google Analytics
                      */
