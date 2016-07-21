@@ -1,100 +1,15 @@
-/**
- * Created by administrator on 6/13/16.
- */
 
 /**
- * Created by rbmtv on 9/24/15.
+ * Created by rbmtv on 9/24/16.
  */
 
 "use strict";
-
 var stripe = require('stripe')(' your stripe API key ');
 
 module.exports = {
 
 
     stripeCustomerApi: function (stripe_payload, callback) {
-
-
-        //Get Customer
-        //        var stripe_payload = {
-        //            stripe_options: {
-        //                get_customer: true,
-        //                stripe_token: 'tok_189fBy2eZvKYlo2CVbITAsWL'
-        //            },
-        //            stripe_customer_information: {
-        //                customer_stripe_id: ''
-        //            }
-        //        }
-
-        //Create customer and transaction
-        //        var stripe_payload = {
-        //            stripe_options: {
-        //                create_recurrent_charge: true,
-        //                stripe_token: 'tok_189fBy2eZvKYlo2CVbITAsWL'
-        //            },
-        //            stripe_customer_information: {
-        //                email: '',
-        //                description: '',
-        //                customer_information: '',
-        //                plan: '',
-        //                plan_description: '',
-        //                coupon: '',
-        //                account_balance: '',
-        //                amount: 0,
-        //                shipping: '',
-        //                tax_percent: 0,
-        //                trial_end: '',
-        //                quantity: 0
-        //            },
-        //            stripe_charge_information: {
-        //                receipt_email: '',
-        //                amount: 0,
-        //                currency: 'usd',
-        //                invoice: '',
-        //                order: '',
-        //                plan: '',
-        //                plan_description: '',
-        //                amount_refunded: '',
-        //                application_fee: '',
-        //                created: ''
-        //
-        //            }
-        //
-        //        }
-
-        //Update customer
-        //        var stripe_payload = {
-        //            stripe_options: {
-        //                update_customer: true,
-        //                stripe_token: 'tok_189fBy2eZvKYlo2CVbITAsWL'
-        //            },
-        //            stripe_customer_information: {
-        //                customer_stripe_id: '',
-        //                email: '',
-        //                description: '',
-        //                customer_information: '',
-        //                plan: '',
-        //                plan_description: '',
-        //                coupon: '',
-        //                account_balance: '',
-        //                amount: 0,
-        //                shipping: '',
-        //                tax_percent: 0,
-        //                trial_end: '',
-        //                quantity: 0
-        //            }
-        //
-        //        }
-
-        ////Customer List
-        //        var stripe_payload = {
-        //            stripe_options: {
-        //                get_customers_list: true,
-        //                stripe_token: 'tok_189fBy2eZvKYlo2CVbITAsWL',
-        //                customer_limit: 100
-        //            }
-        //        }
 
         if (stripe_payload.create_recurrent_charge) {
 
@@ -172,39 +87,6 @@ module.exports = {
     },
     stripeChargesApi: function (stripe_payload, callback) {
 
-//        //Update customer
-//        var stripe_payload = {
-//            stripe_options: {
-//                create_charge: true,
-//                stripe_token: 'tok_189fBy2eZvKYlo2CVbITAsWL'
-//            },
-//            stripe_customer_information: {
-//                customer_stripe_id: '',
-//                description: 'Charge for test@example.com',
-//                amount: '',
-//                currency: 'usd',
-//                receipt_email: '',
-//                shipping: ''
-//            }
-//
-//        }
-
-//        var stripe_payload = {
-//            stripe_options: {
-//                retrieve_charge: true
-//            },
-//            stripe_charge_information: {
-//                charge_stripe_id: ''
-//            }
-//
-//        }
-
-//        var stripe_payload = {
-//            stripe_options: {
-//                get_charges_list: true,
-//                charges_limit: 100
-//            }
-//        }
         var stripe_payload = {
             stripe_options: {
                 update_charge: true
